@@ -5,12 +5,12 @@ flow push
 import os
 import sys
 import git
-from pylib._coreBase.commandBasic import GitBase, CheckStatus
+from bin.local._coreBase.commandBasic import exec_commands, GitBase, CheckStatus
 
 
 class FindProject(object):
     def __init__(self):
-        self.current_path = r"D:\zhaochang\example_project\bp"  # TODO:later change into os.getcwd()
+        self.current_path = r"D:\zhaochang\example_project\bp\bp"  # TODO:later change into os.getcwd()
         self.project_name_list = []
         self.project_dir_set = set()
         self.projects_branches_dictionary = {}
@@ -73,6 +73,7 @@ class FindProject(object):
 
 class PrintStatus(CheckStatus):
     """Check status and print infos"""
+
     def check_is_changed(self):
         if self.is_changed():
             print "You have changed something!"
@@ -87,18 +88,26 @@ class PrintStatus(CheckStatus):
 
 
 class DoPush(object):
+    def __init__(self, cwd, branch):
+        self.flow_workspace = cwd
+        self.flow_branch = branch
+
+    def commit_changes(self):
+        pass
 
     def rebase_branch(self):
-        pass
-
-    def checkout_branch(self, branch_name):
-        pass
-
-    def merge_branch(self):
-        pass
+        """rebase master"""
+        msg, err = exec_commands(
+            "git pull --rebase origin master", self.flow_workspace)
+        print msg, err
 
     def push_branch(self):
-        pass
+        """merge dev branch into master and push master"""
+        exec_commands("git checkout master;git merge {};git push origin master".format(self.flow_branch), self.flow_workspace)
+
+    def checkout_branch(self, branch_name):
+        """checkout into branch"""
+        exec_commands("git checkout {}".format(branch_name), self.flow_workspace)
 
 
 if __name__ == '__main__':  # TODO:later change it into run()
@@ -107,7 +116,9 @@ if __name__ == '__main__':  # TODO:later change it into run()
         pro_ins.find_below_projects(r"D:\zhaochang\example_project\bp")
     project_branch_dir = pro_ins.get_projects_branches()
     for key, value in project_branch_dir.items():
-        status = PrintStatus(value, key)
-        status.check_is_changed()
-        status.check_is_committed()
-        status.check_is_pushed()
+        print_status = PrintStatus(key, value)
+        print_status.check_is_changed()
+        print_status.check_is_committed()
+        print_status.check_is_pushed()
+        # do_push = DoPush(key, value)
+        # do_push.rebase_branch()

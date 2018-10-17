@@ -41,7 +41,7 @@ class GitBase(object):
 
 class CheckStatus(object):
     """check project branch status"""
-    def __init__(self, branch, cwd):
+    def __init__(self, cwd, branch):
         self.flow_branch = branch
         self.cwd = cwd
 

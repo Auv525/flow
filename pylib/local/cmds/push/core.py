@@ -78,16 +78,22 @@ class PrintStatus(CheckStatus):
     #         return True
 
     def check_is_committed(self):
-        if self.is_changed() and not self.is_committed():
-            print "You have some changes should be committed!"
+        print self.is_changed()
+        print self.is_committed()
+        if self.is_changed():
+            if self.is_committed():
+                return True
         else:
-            print "\nNothing to push, working tree clean"
+            if not self.is_committed():
+                print "You have some changes to be committed!"
+                exit(1)
 
 
 class DoPush(object):
     def __init__(self, cwd, branch):
         self.flow_workspace = cwd
         self.flow_branch = branch
+        self.flow_project = os.path.split(cwd)[1]
 
     def rebase_branch(self):
         """rebase master"""
@@ -97,11 +103,13 @@ class DoPush(object):
 
     def push_branch(self):
         """merge dev branch into master and push master"""
-        exec_commands("git checkout master;git merge {};git push origin master".format(self.flow_branch), self.flow_workspace)
+        msg, err = exec_commands("git checkout master;git merge {};git push origin master".format(self.flow_branch), self.flow_workspace)
+        print msg, err
+        print "{}/ {} has been pushed successfully!".format(self.flow_project, self.flow_branch)
 
-    def checkout_branch(self, branch_name):
+    def checkout_branch(self):
         """checkout into branch"""
-        exec_commands("git checkout {}".format(branch_name), self.flow_workspace)
+        exec_commands("git checkout {}".format(self.flow_branch), self.flow_workspace)
 
 
 def run():
@@ -111,6 +119,8 @@ def run():
     project_branch_dir = pro_ins.get_projects_branches()
     for key, value in project_branch_dir.items():
         print_status = PrintStatus(key, value)
-        print_status.check_is_committed()
-        # do_push = DoPush(key, value)
-        # do_push.rebase_branch()
+        if print_status.check_is_committed():
+            do_push = DoPush(key, value)
+            do_push.rebase_branch()
+            do_push.push_branch()
+            do_push.checkout_branch()

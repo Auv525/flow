@@ -59,6 +59,8 @@ class CheckStatus(object):
         if local_sha:
             if local_sha.split()[0] not in master_sha:
                 return True
+            else:
+                return False
 
     def is_committed(self):
         """if nothing to be committed, return True"""

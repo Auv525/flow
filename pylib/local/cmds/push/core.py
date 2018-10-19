@@ -67,24 +67,21 @@ class FindProject(object):
             head_branch = gitBase.get_head_branch()
             self.projects_branches_dictionary[dir] = head_branch.name
 
-        print self.projects_branches_dictionary
         return self.projects_branches_dictionary
 
 
 class PrintStatus(CheckStatus):
     """Check status and print infos"""
-
-    def check_is_changed(self):
-        if self.is_changed():
-            print "You have changed something!"
+    # def check_is_changed(self):
+    #     if self.is_changed():
+    #         print "You have changed something!"
+    #         return True
 
     def check_is_committed(self):
-        if not self.is_committed():
+        if self.is_changed() and not self.is_committed():
             print "You have some changes should be committed!"
-
-    def check_is_pushed(self):
-        if not self.is_pushed():
-            print "You have some changes should be pushed!"
+        else:
+            print "\nNothing to push, working tree clean"
 
 
 class DoPush(object):
@@ -114,8 +111,6 @@ def run():
     project_branch_dir = pro_ins.get_projects_branches()
     for key, value in project_branch_dir.items():
         print_status = PrintStatus(key, value)
-        print_status.check_is_changed()
         print_status.check_is_committed()
-        print_status.check_is_pushed()
         # do_push = DoPush(key, value)
         # do_push.rebase_branch()

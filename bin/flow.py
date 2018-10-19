@@ -3,19 +3,23 @@
 """
 List all commands and arguments
 """
-import os
+import sys
 import argparse
 from local.cmds.push.core import run as push_run
 
 
-class CommandBase(object):
+def push():
+    parser = argparse.ArgumentParser(prog='push', description="git helper program")
+    parser.add_argument("-v", "--verbose", action='store_true')
 
-    def push(self):
-        paser = argparse.ArgumentParser(description='flow setup')
-        # paser.add_argument()
-        # args = paser.parse_args()
-        push_run()
+    args = parser.parse_args(sys.argv[2:])
+
+    print 'verbose', args.verbose
+    # push_run(sys.argv[2:])
+    push_run()
 
 
-comm = CommandBase()
-comm.push()
+# print sys.argv
+# if sys.argv[1] == 'push':
+#     push()
+push()

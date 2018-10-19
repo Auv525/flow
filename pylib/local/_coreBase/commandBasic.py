@@ -40,7 +40,7 @@ class GitBase(object):
             head_branch = repo.head.ref
             return head_branch
         except TypeError:
-            print "You are rebasing on {}".format(self.git_workspace)
+            print "\nYou are rebasing on {}".format(self.git_workspace)
             print "Please fix conflicts!"
 
             exit(1)

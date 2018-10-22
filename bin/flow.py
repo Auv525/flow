@@ -36,7 +36,7 @@ subparsers = parser.add_subparsers(dest='subparser_name')
 
 # create the parser for the "foo" command
 parser_foo = subparsers.add_parser('push')
-parser_foo.add_argument('-x', type=int, default=1)
+parser_foo.add_argument('-v', "--verbose", action="store_true", default=False, dest="verbose")
 parser_foo.set_defaults(func=push)
 
 # create the parser for the "bar" command
@@ -46,5 +46,6 @@ parser_bar.set_defaults(func=update)
 
 # parser.print_help()
 # parse the args and call whatever function was selected
-args = parser.parse_args('push -x 1'.split())
+print sys.argv
+args = parser.parse_args(sys.argv[1:])
 args.func(args)

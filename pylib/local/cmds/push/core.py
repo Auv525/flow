@@ -78,8 +78,6 @@ class PrintStatus(CheckStatus):
     #         return True
 
     def check_is_committed(self):
-        print self.is_changed()
-        print self.is_committed()
         if self.is_changed():
             if self.is_committed():
                 return True
@@ -105,8 +103,8 @@ class DoPush(object):
         """merge dev branch into master and push master"""
         command = "git checkout master;git merge {};git push origin master".format(self.flow_branch)
         msg, err = exec_commands(command=command, cwd=self.flow_workspace)
-        print "command: ", command
-        print msg, err
+        # print "command: ", command
+        # print msg, err
         if not err:
             print "{}/ {} has been pushed successfully!".format(self.flow_project, self.flow_branch)
         else:

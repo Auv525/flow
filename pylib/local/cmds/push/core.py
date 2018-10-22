@@ -103,7 +103,9 @@ class DoPush(object):
 
     def push_branch(self):
         """merge dev branch into master and push master"""
-        msg, err = exec_commands("git checkout master;git merge {};git push origin master".format(self.flow_branch), self.flow_workspace)
+        command = "git checkout master;git merge {};git push origin master".format(self.flow_branch)
+        msg, err = exec_commands(command=command, cwd=self.flow_workspace)
+        print "command: ", command
         print msg, err
         print "{}/ {} has been pushed successfully!".format(self.flow_project, self.flow_branch)
 

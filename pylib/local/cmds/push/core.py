@@ -107,7 +107,10 @@ class DoPush(object):
         msg, err = exec_commands(command=command, cwd=self.flow_workspace)
         print "command: ", command
         print msg, err
-        print "{}/ {} has been pushed successfully!".format(self.flow_project, self.flow_branch)
+        if not err:
+            print "{}/ {} has been pushed successfully!".format(self.flow_project, self.flow_branch)
+        else:
+            print "push error!"
 
     def checkout_branch(self):
         """checkout into branch"""
@@ -119,6 +122,7 @@ def run():
     if not pro_ins.find_above_projects():
         pro_ins.find_below_projects(r"D:\zhaochang\example_project\flow_test")
     project_branch_dir = pro_ins.get_projects_branches()
+    # TODO: when branch is master, exit or prompt question
     for key, value in project_branch_dir.items():
         print_status = PrintStatus(key, value)
         if print_status.check_is_committed():

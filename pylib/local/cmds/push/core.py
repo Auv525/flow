@@ -68,8 +68,8 @@ def push_prepare_parser(parser):
 
 
 def run(args):
-    flow_workspace = Workspace([r"D:\zhaochang\example_project\flow_test"])
-    project_branch_dir = FlowProjectSpec(flow_workspace).prompt_user_to_initialize(r"D:\zhaochang\example_project\flow_test")
+    flow_workspace = Workspace([os.getcwd()])
+    project_branch_dir = FlowProjectSpec(flow_workspace).prompt_user_to_initialize(os.getcwd())
     print project_branch_dir.workspace.projects_dir_branch
     # TODO: when branch is master, exit or prompt question
     for key, value in project_branch_dir.workspace.projects_dir_branch.items():

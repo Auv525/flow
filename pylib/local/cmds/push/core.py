@@ -21,8 +21,7 @@ class PrintStatus(CheckStatus):
         if self.is_changed():
             if self.is_committed():
                 return True
-        else:
-            if not self.is_committed():
+            else:
                 print "You have some changes to be committed!"
                 exit(1)
 

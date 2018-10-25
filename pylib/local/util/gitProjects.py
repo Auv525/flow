@@ -35,11 +35,13 @@ def find_child_projects(dir):
     :param str dir:
     :return:
     """
-
+    print dir
     project_dir_set = set()
-    for root, dirs, files in os.walk(dir):  # TODO: change into one level deep only
-        if git.repo.fun.is_git_dir(root):
-            project_dir_set.add(os.path.split(root)[0])
+    for sub_pro in os.listdir(dir):
+        for sub_dir in os.listdir(os.path.join(dir, sub_pro)):
+            if git.repo.fun.is_git_dir(os.path.join(dir, sub_pro, sub_dir)):
+                project_dir_set.add(os.path.join(dir, sub_pro))
+
     return project_dir_set
 
 

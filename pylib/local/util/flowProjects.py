@@ -37,7 +37,7 @@ class FlowProjectSpec(object):
         pp = find_enclosing_git_project(dir)
         print "enclosing: ", pp
         if pp is not None:
-            cp = find_child_projects(os.path.split(dir)[0])
+            cp = find_child_projects(os.path.split(pp)[0])
             print "child: ", cp
             if cp:
                 """
@@ -51,8 +51,8 @@ class FlowProjectSpec(object):
                     workspace = Workspace(cp)
                     return FlowProjectSpec(workspace)
                 else:
-                    workspace = Workspace([dir])
-                    return FlowProjectSpec(workspace, dir)
+                    workspace = Workspace([pp])
+                    return FlowProjectSpec(workspace, pp)
 
         else:
             cp = find_child_projects(dir)

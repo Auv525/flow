@@ -68,14 +68,16 @@ def push_prepare_parser(parser):
 
 
 def run(args):
-    flow_workspace = Workspace([os.getcwd()])
-    project_branch_dir = FlowProjectSpec(flow_workspace).prompt_user_to_initialize(os.getcwd())
-    print project_branch_dir.workspace.projects_dir_branch
+    project_spec = FlowProjectSpec.prompt_user_to_initialize(os.getcwd())
+    project_workspace = project_spec.workspace
+    print project_workspace.get_project_dirs_list()
+
     # TODO: when branch is master, exit or prompt question
-    for key, value in project_branch_dir.workspace.projects_dir_branch.items():
-        print_status = PrintStatus(key, value)
+    for dir in project_workspace.get_project_dirs_list():
+        flow_branch = project_workspace.get_branch_name(dir)
+        print_status = PrintStatus(dir, flow_branch)
         if print_status.check_is_committed():
-            do_push = DoPush(key, value)
+            do_push = DoPush(dir, flow_branch)
             do_push.rebase_branch()
             do_push.push_branch()
             do_push.checkout_branch()

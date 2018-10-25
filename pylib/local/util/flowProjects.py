@@ -40,6 +40,10 @@ class FlowProjectSpec(object):
             cp = find_child_projects(os.path.split(dir)[0])
             print "child: ", cp
             if cp:
+                """
+                if user says all, then do: return FlowProjectSpec(workspace)
+                if user says only one, then do: return FlowProjectSpec(workspace, cwd)
+                """
                 all_projects_enter = raw_input(
                     "You have these git projects: {}\nDo you want to push all of these projects or not? (y/n) ".format(
                         get_projects_names(cp)))
@@ -50,10 +54,6 @@ class FlowProjectSpec(object):
                     workspace = Workspace([dir])
                     return FlowProjectSpec(workspace, dir)
 
-            """
-            if user says all, then do: return FlowProjectSpec(workspace)
-            if user says only one, then do: return FlowProjectSpec(workspace, cwd)
-            """
         else:
             cp = find_child_projects(dir)
             if len(cp):

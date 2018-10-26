@@ -33,15 +33,16 @@ def find_child_projects(dir):
     """
     Returns a set of subdirectories (only one level deep) that are git projects
 
-    :param str dir:
-    :return:
+    :param str dir: starting directory for search
+    :return: the set of directory that was found
     """
     print dir
     project_dir_set = set()
     for sub_pro in os.listdir(dir):
-        for sub_dir in os.listdir(os.path.join(dir, sub_pro)):
-            if git.repo.fun.is_git_dir(os.path.join(dir, sub_pro, sub_dir)):
-                project_dir_set.add(os.path.join(dir, sub_pro))
+        if os.path.isdir(os.path.join(dir, sub_pro)):
+            for sub_dir in os.listdir(os.path.join(dir, sub_pro)):
+                if git.repo.fun.is_git_dir(os.path.join(dir, sub_pro, sub_dir)):
+                    project_dir_set.add(os.path.join(dir, sub_pro))
 
     return project_dir_set
 
@@ -50,8 +51,8 @@ def get_projects_names(project_dir_set):
     """
     Returns project names list
 
-    :param set project_dir_set:
-    :return:
+    :param set project_dir_set: project dir set
+    :return: project names list
     """
     project_name_list = []
     for dir in project_dir_set:

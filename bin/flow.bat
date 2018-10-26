@@ -1,6 +1,6 @@
-:: set PYTHONPATH=S:\archives\code\flow\pylib;%PYTHONPATH%
+set BIN_PATH=%~dp0
+set PYLIB_PATH=%BIN_PATH:bin=pylib%
+set PYTHONPATH=%PYLIB_PATH%;%PYTHONPATH%
 
-set PYTHONPATH=D:\zhaochang\workspace\flow\pylib;%PYTHONPATH%
-set FLOW_PATH=%~dp0flow.py
+set FLOW_PATH=%BIN_PATH%flow.py
 C:\python27\python.exe %FLOW_PATH% %*
-

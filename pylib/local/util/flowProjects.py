@@ -39,7 +39,7 @@ class FlowProjectSpec(object):
             return self.workspace.get_project_dirs_list()
 
     @classmethod
-    def prompt_user_to_initialize(cls, dir, action=None):
+    def prompt_user_to_specify(cls, dir, action=None):
         """
         This method will, if needed, ask the user for clarification about the intended action
 
@@ -56,9 +56,8 @@ class FlowProjectSpec(object):
             # let's test that theory
             child_projects = find_child_projects(workspace_dir)
             print "child: ", child_projects
-            # if child_projects is None:
-            #     raise RuntimeError("Bad")
 
+            # prompt user to specify project which should operate on
             workspace = Workspace(child_projects)
             prompt = 'You have these git projects: {p}\nDo you want to {a} all of these projects or not? (y/n) '.format(
                     p=get_projects_names(child_projects),
@@ -75,10 +74,10 @@ class FlowProjectSpec(object):
             else:
                 return FlowProjectSpec(workspace, enclosing_project)
         else:
-            # TODO: check the logic
+            # if not found a git project, we assume it is a workspace dir
             child_projects = find_child_projects(dir)
             if not len(child_projects):
-                print 'bad workspace'
+                print 'Please run flow command in workspace directory!'
                 sys.exit(1)
             workspace = Workspace(child_projects)
             return FlowProjectSpec(workspace)

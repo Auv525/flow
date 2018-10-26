@@ -1,8 +1,8 @@
 import os
 import sys
 
-from local.util.gitProjects import find_enclosing_git_project, find_child_projects, get_projects_names
-from local.util.workspace import Workspace
+from local.util.findProjects import find_enclosing_git_project, find_child_projects, get_projects_names
+from local.util.gitWorkspace import GitWorkspace
 
 
 class FlowProjectSpec(object):
@@ -14,7 +14,7 @@ class FlowProjectSpec(object):
         If active_project is None, then that means all projects.
         If active_project is a string, then only that project.
 
-        :param Workspace workspace: Workspace object
+        :param GitWorkspace workspace: Workspace object
         :param str active_project: active project name
         :return:
         """
@@ -58,7 +58,7 @@ class FlowProjectSpec(object):
             print "child: ", child_projects
 
             # prompt user to specify project which should operate on
-            workspace = Workspace(child_projects)
+            workspace = GitWorkspace(child_projects)
             prompt = 'You have these git projects: {p}\nDo you want to {a} all of these projects or not? (y/n) '.format(
                     p=get_projects_names(child_projects),
                     a=action
@@ -79,5 +79,5 @@ class FlowProjectSpec(object):
             if not len(child_projects):
                 print 'Please run flow command in workspace directory!'
                 sys.exit(1)
-            workspace = Workspace(child_projects)
+            workspace = GitWorkspace(child_projects)
             return FlowProjectSpec(workspace)

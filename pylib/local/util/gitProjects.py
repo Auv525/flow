@@ -7,8 +7,9 @@ def find_enclosing_git_project(dir):
     Returns the path to the directory at the current level or above
     If there is no such directory, it returns None
 
-    :param str dir:
-    :return:
+    :param str dir: starting directory for search
+    :return: the directory that was found, or None
+    :rtype: str|None
     """
 
     found = False

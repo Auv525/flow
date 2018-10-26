@@ -11,7 +11,7 @@ class Workspace(object):
 
     def __init__(self, dirs):
         """
-        :param dirs: list or set of dirs
+        :param dirs: list or set of workspace dirs
         """
         self._project_infos = {}
 
@@ -26,11 +26,24 @@ class Workspace(object):
             )
 
     def get_project_dirs_list(self):
+        """Return project dirs list"""
         return self._project_infos.keys()
 
     def get_project_name(self, dir):
+        """
+        Return project name in this dir
+
+        :param str dir: project dir
+        :return:
+        """
         return self._project_infos[dir].git_name
 
     def get_branch_name(self, dir):
+        """
+        Return HEAD branch name in this dir
+
+        :param str dir: project dir
+        :return:
+        """
         return self._project_infos[dir].branch
 

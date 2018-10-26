@@ -5,7 +5,8 @@ List all commands and arguments
 """
 import sys
 import argparse
-from local.cmds.push.core import push_prepare_parser
+from local.cmds.push.core import prepare_push_parser
+from local.cmds.update.core import prepare_update_parser
 
 
 def update(args):
@@ -18,13 +19,12 @@ def main():
     subparsers = parser.add_subparsers()
 
     # create the parser for the "push" command
-    parser_push = subparsers.add_parser('push')
-    push_prepare_parser(parser_push)
+    push_parser = subparsers.add_parser('push')
+    prepare_push_parser(push_parser)
 
     # create the parser for the "update" command
-    parser_update = subparsers.add_parser('update')
-    parser_update.add_argument('z')
-    parser_update.set_defaults(func=update)
+    update_parser = subparsers.add_parser('update')
+    prepare_update_parser(update_parser)
 
     # parser.print_help()
     # parse the args and call whatever function was selected

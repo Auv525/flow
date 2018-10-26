@@ -24,6 +24,8 @@ class PrintStatus(CheckStatus):
             else:
                 print "You have some changes to be committed!"
                 exit(1)
+        else:
+            print "Nothing changed"
 
 
 class DoPush(object):
@@ -54,7 +56,7 @@ class DoPush(object):
         exec_commands("git checkout {}".format(self.flow_branch), self.flow_workspace)
 
 
-def push_prepare_parser(parser):
+def prepare_push_parser(parser):
     """
     Create the parser argument for the "push" sub-command
 
@@ -69,11 +71,13 @@ def push_prepare_parser(parser):
 def run(args):
     project_spec = FlowProjectSpec.prompt_user_to_initialize(os.getcwd())
     project_workspace = project_spec.workspace
-    print project_workspace.get_project_dirs_list()
+    project_dirs = project_spec.get_active_projects()
+    print project_dirs
 
     # TODO: when branch is master, exit or prompt question
-    for dir in project_workspace.get_project_dirs_list():
+    for dir in project_dirs:
         flow_branch = project_workspace.get_branch_name(dir)
+        print flow_branch
         print_status = PrintStatus(dir, flow_branch)
         if print_status.check_is_committed():
             do_push = DoPush(dir, flow_branch)

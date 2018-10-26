@@ -45,7 +45,7 @@ class DoPush(object):
         command = "git checkout master;git merge {};git push origin master".format(self.flow_branch)  # TODO:
         msg, err = exec_commands(command=command, cwd=self.flow_workspace)
         # print "command: ", command
-        # print msg, err
+        print msg, err
         if not err:
             print "{}/ {} has been pushed successfully!".format(self.flow_project, self.flow_branch)
         else:
@@ -69,7 +69,7 @@ def prepare_push_parser(parser):
 
 
 def run(args):
-    project_spec = FlowProjectSpec.prompt_user_to_initialize(os.getcwd())
+    project_spec = FlowProjectSpec.prompt_user_to_initialize(os.getcwd(), "push")
     project_workspace = project_spec.workspace
     project_dirs = project_spec.get_active_projects()
     print project_dirs

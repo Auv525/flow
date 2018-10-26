@@ -44,7 +44,7 @@ class FlowProjectSpec(object):
         This method will, if needed, ask the user for clarification about the intended action
 
         :param str dir: the directory where the search for workspace should begin
-        :param str action: a string that will be used when interaction with the user
+        :param str action: an action that will operate
         :return:
         """
         enclosing_project = find_enclosing_git_project(dir)

@@ -36,7 +36,7 @@ def find_child_projects(dir):
     :param str dir: starting directory for search
     :return: the set of directory that was found
     """
-    print dir
+
     project_dir_set = set()
     for sub_pro in os.listdir(dir):
         if os.path.isdir(os.path.join(dir, sub_pro)):

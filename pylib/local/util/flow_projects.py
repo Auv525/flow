@@ -1,8 +1,8 @@
 import os
 import sys
 
-from local.util.findProjects import find_enclosing_git_project, find_child_projects, get_projects_names
-from local.util.gitWorkspace import GitWorkspace
+from local.util.find_projects import find_enclosing_git_project, find_child_projects, get_projects_names
+from local.util.git_workspace import GitWorkspace
 
 
 class FlowProjectSpec(object):

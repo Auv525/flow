@@ -13,7 +13,5 @@ def exec_commands(command, cwd):
     :param cwd: command run in cwd
     :return:
     """
-    pr = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd)
-    msg = pr.stdout.read()
-    err = pr.stderr.read()
-    return msg, err
+
+    return subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT, cwd=cwd)

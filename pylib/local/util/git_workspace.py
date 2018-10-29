@@ -14,7 +14,6 @@ class GitWorkspace(object):
         self._project_infos = {}
 
         for dir in dirs:
-
             self._project_infos[dir] = FlowProjectInfo(
                 dir=dir,
                 dir_name=os.path.basename(dir)
@@ -22,4 +21,5 @@ class GitWorkspace(object):
 
     def get_project_dirs_list(self):
         """Return project dirs list"""
+
         return self._project_infos.keys()

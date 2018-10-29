@@ -5,10 +5,8 @@ flow update core
 """
 import argparse
 
-from local._coreBase.commandBasic import exec_commands
-from local.util.git_project import GitProject
-from local.util.flowProjects import FlowProjectSpec
-from local.util.gitWorkspace import *
+from local.util.flow_projects import FlowProjectSpec
+from local.util.git_workspace import *
 
 
 class DoUpdate(object):

@@ -80,7 +80,6 @@ class GitProject(object):
     def check_is_committed(self):
         """check if branch is committed and print info"""
 
-        # self.check_is_changed()
         if not self.is_committed():
             print "You have some changes to be committed!"
             sys.exit(1)
@@ -93,7 +92,7 @@ class GitProject(object):
     def push_branch(self):
         """merge dev branch into master and push master"""
 
-        command = "git checkout master;git merge {};git push origin master".format(self.dev_branch)  # TODO:fix bug
+        command = "git checkout master" + "git merge {}".format(self.dev_branch) + "git push origin master"   # TODO:fix bug
         return exec_commands(command, self.project_directory)
 
     def checkout_branch(self):

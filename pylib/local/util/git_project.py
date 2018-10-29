@@ -13,6 +13,12 @@ class GitProject(object):
         self.project_directory = directory
         self.dev_branch = None
         self.repository = git.Repo(self.project_directory)
+        self.get_head_branch()
+        # the sha key for current HEAD on the current branch
+        self.local_binsha = self.repository.head.commit.binsha or None
+        self.local_hexsha = self.repository.head.commit.hexsha or None
+        # the remote master sha keys
+        self.master_sha = exec_commands("git ls-remote origin | find \"master\"", self.project_directory) or None
 
     def get_head_branch(self):
         """get head branch name"""
@@ -33,19 +39,15 @@ class GitProject(object):
     def is_changed(self):
         """if branch has been changed, return True"""
 
-        # get the sha key for current HEAD on the current branch
-        local_sha = exec_commands("git rev-parse \"{}\"".format(self.dev_branch), self.project_directory)
-        # get the remote master sha keys
-        master_sha = exec_commands("git ls-remote origin | find \"master\"", self.project_directory)
-        if local_sha:
-            return local_sha.split()[0] not in master_sha
+        if self.local_hexsha:
+            return self.local_hexsha not in self.master_sha
         else:
             return None
 
     def is_committed(self):
         """if nothing to be committed, return True"""
-
-        return "nothing to commit" in self.repository.git.status()
+        print self.repository.is_dirty()
+        return self.repository.is_dirty()
 
     def is_pushed(self):
         """if branch has been pushed, return True"""
@@ -92,7 +94,7 @@ class GitProject(object):
     def push_branch(self):
         """merge dev branch into master and push master"""
 
-        command = ["git checkout master", "git merge {}".format(self.dev_branch), "git push origin master"]  # TODO:fix bug
+        command = "git checkout master;git merge {};git push origin master".format(self.dev_branch)  # TODO:fix bug
         return exec_commands(command, self.project_directory)
 
     def checkout_branch(self):

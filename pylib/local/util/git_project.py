@@ -92,7 +92,7 @@ class GitProject(object):
     def push_branch(self):
         """merge dev branch into master and push master"""
 
-        command = "git checkout master" + "git merge {}".format(self.dev_branch) + "git push origin master"   # TODO:fix bug
+        command = ["git checkout master", "git merge {}".format(self.dev_branch), "git push origin master"]  # TODO:fix bug
         return exec_commands(command, self.project_directory)
 
     def checkout_branch(self):

@@ -14,4 +14,4 @@ def exec_commands(command, cwd):
     :return:
     """
 
-    return subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT, cwd=cwd)
+    return subprocess.check_output(command, cwd=cwd)

@@ -48,14 +48,14 @@ class FlowProjectSpec(object):
         :return:
         """
         enclosing_project = find_enclosing_git_project(dir)
-        print "enclosing: ", enclosing_project
+        print 'enclosing: ', enclosing_project
         if enclosing_project is not None:
             # if we found a git project, we assume its parent is a workspace dir
             workspace_dir = os.path.dirname(enclosing_project)
 
             # let's test that theory
             child_projects = find_child_projects(workspace_dir)
-            print "child: ", child_projects
+            print 'child: ', child_projects
 
             # prompt user to specify project which should operate on
             workspace = GitWorkspace(child_projects)

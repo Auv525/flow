@@ -88,7 +88,6 @@ class GitProject(object):
     def merge_branch(self, branch):
         # TODO:change with gitPython
         subprocess.check_output('git merge {}'.format(branch), cwd=self.project_directory)
-        # self._repository.merge_base(branch, self.master_branch)
 
     def push_master(self):
         # TODO:change with gitPython

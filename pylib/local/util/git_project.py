@@ -1,7 +1,6 @@
 import sys
 import git
 import subprocess
-from local._core_base.command_basic import exec_commands
 
 
 class GitProject(object):
@@ -24,7 +23,7 @@ class GitProject(object):
         self.local_binsha = self._repository.head.commit.binsha or None
         self.local_hexsha = self._repository.head.commit.hexsha or None
         # the remote master sha keys
-        self.master_sha = exec_commands("git ls-remote origin | find \"master\"", self.project_directory) or None
+        self.master_sha = subprocess.check_output("git ls-remote origin | find \"master\"", cwd=self.project_directory) or None
 
     def check_is_dev_branch(self):
         """check if HEAD branch is dev branch"""
@@ -38,25 +37,25 @@ class GitProject(object):
             print 'Please checkout into dev branch!'
             sys.exit(1)
 
-    def is_committed(self):
+    def _is_committed(self):
         """if nothing to be committed, return True"""
 
         return self._repository.is_dirty()
 
-    def is_pushed(self):
+    def _is_pushed(self):
         """if branch has been pushed, return True"""
 
-        remote_id = exec_commands("git ls-remote origin | find \'{}\'".format(self.branch_name), self.project_directory)
+        remote_id = subprocess.check_output("git ls-remote origin | find \'{}\'".format(self.branch_name), cwd=self.project_directory)
         try:
             return remote_id.split()[0] in self.local_hexsha
         except IndexError:
             return False
 
-    def is_merged(self):
+    def _is_merged(self):
         """if branch has been merged into master, return True"""
 
-        remote_id = exec_commands("git ls-remote origin | find \'{}\'".format(self.branch_name), self.project_directory)
-        master_id = exec_commands("git ls-remote origin | find \'master\'", self.project_directory)
+        remote_id = subprocess.check_output("git ls-remote origin | find \'{}\'".format(self.branch_name), cwd=self.project_directory)
+        master_id = subprocess.check_output("git ls-remote origin | find \'master\'", cwd=self.project_directory)
         try:
             return remote_id.split()[0] in master_id
         except IndexError:
@@ -65,7 +64,7 @@ class GitProject(object):
     def check_is_committed(self):
         """check if branch is committed and print info"""
 
-        if not self.is_committed():
+        if not self._is_committed():
             print 'You have some changes to be committed!'
             sys.exit(1)
 
@@ -73,18 +72,20 @@ class GitProject(object):
         """rebase master branch"""
 
         try:
-            exec_commands('git pull --rebase origin master', self.project_directory)
+            subprocess.check_output('git pull --rebase origin master', cwd=self.project_directory)
         except subprocess.CalledProcessError:
-            raise RebaseConflictEncountered
-
-    def merge_to_master_and_push_master(self):
-        """merge dev branch into master and push master"""
-
-        exec_commands('git checkout master', self.project_directory)
-        exec_commands('git merge {}'.format(self.branch_name), self.project_directory)
-        exec_commands('git push origin master', self.project_directory)
+            sys.exit(1)
 
     def checkout_branch(self, branch):
         """checkout into specify branch"""
 
-        exec_commands('git checkout {}'.format(branch), self.project_directory)
+        subprocess.check_output('git checkout {}'.format(branch), cwd=self.project_directory)
+
+    def merge_branch(self, branch):
+        # TODO:change with gitPython
+        subprocess.check_output('git merge {}'.format(branch), cwd=self.project_directory)
+
+    def push_master(self):
+        # TODO:change with gitPython
+        subprocess.check_output('git push origin master', cwd=self.project_directory)
+

@@ -6,6 +6,7 @@ Basic functions in commands
 import subprocess
 
 
+# TODO:remove this func later
 def exec_commands(command, cwd):
     """
     run command in terminal

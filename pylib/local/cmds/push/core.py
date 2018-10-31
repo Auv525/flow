@@ -5,6 +5,7 @@ flow push core
 """
 import sys
 import argparse
+import subprocess
 
 from local.util.git_project import GitProject
 from local.util.flow_projects import FlowProjectSpec
@@ -33,16 +34,10 @@ def run(args):
         project.check_is_dev_branch()
         dev_branch = project.branch_name
         project.check_is_committed()
-        try:
-            project.rebase_master()
-        except RebaseConflictEncountered:
-            print 'Conflicts occurred while rebasing to origin/master branch.'
-            print 'Resolve the conflicts, then ...'
-            sys.exit(1)
+        project.rebase_master()
 
-        # TODO:think about MVC
-        # project.checkout_branch('master')
-        # project.merge(dev_branch)
-        # project.push()
-        project.merge_to_master_and_push_master()
+        project.checkout_branch('master')
+        # TODO:should we use GitProject interface or directly gitPython ???
+        project.merge_branch(dev_branch)
+        project.push_master()
         project.checkout_branch(dev_branch)

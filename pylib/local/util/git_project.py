@@ -12,18 +12,17 @@ class GitProject(object):
     def __init__(self, directory):
         self.project_directory = directory
         self._repository = git.Repo(self.project_directory)
+        self.master_branch = self._repository.heads.master
         try:
-            self._head_branch = self._repository.head.ref
-            self.branch_name = self._head_branch.name
+            # self.active_branch = self._repository.head.ref
+            self.head_branch = self._repository.head.ref   # TODO:test when rebasing, it raise TypeError
+            self.branch_name = self.head_branch.ref.name
         except TypeError:
-            self._head_branch = None
             self.branch_name = None
 
         # the sha key for current HEAD on the current branch
         self.local_binsha = self._repository.head.commit.binsha or None
         self.local_hexsha = self._repository.head.commit.hexsha or None
-        # the remote master sha keys
-        self.master_sha = subprocess.check_output("git ls-remote origin | find \"master\"", cwd=self.project_directory) or None
 
     def check_is_dev_branch(self):
         """check if HEAD branch is dev branch"""
@@ -77,15 +76,20 @@ class GitProject(object):
             sys.exit(1)
 
     def checkout_branch(self, branch):
-        """checkout into specify branch"""
+        """
+        checkout branch
+        :param HEAD branch: HEAD object should be checkout into
+        :return:
+        """
 
-        subprocess.check_output('git checkout {}'.format(branch), cwd=self.project_directory)
+        # subprocess.check_output('git checkout {}'.format(branch), cwd=self.project_directory)
+        branch.checkout()    # TODO:use HEAD or name?
 
     def merge_branch(self, branch):
         # TODO:change with gitPython
         subprocess.check_output('git merge {}'.format(branch), cwd=self.project_directory)
+        # self._repository.merge_base(branch, self.master_branch)
 
     def push_master(self):
         # TODO:change with gitPython
         subprocess.check_output('git push origin master', cwd=self.project_directory)
-

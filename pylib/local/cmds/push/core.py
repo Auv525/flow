@@ -32,11 +32,12 @@ def run(args):
     for dir in project_spec.get_active_projects():
         project = GitProject(dir)
         project.check_is_dev_branch()
-        dev_branch = project.branch_name
+        dev_branch = project.head_branch
+        master_branch = project.master_branch
         project.check_is_committed()
         project.rebase_master()
 
-        project.checkout_branch('master')
+        project.checkout_branch(master_branch)
         # TODO:should we use GitProject interface or directly gitPython ???
         project.merge_branch(dev_branch)
         project.push_master()

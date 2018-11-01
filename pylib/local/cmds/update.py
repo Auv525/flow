@@ -1,11 +1,13 @@
 # !usr/bin/env python
 # -*- coding: UTF-8 -*-
+# Author    : ZhaoChang
+# Email     : zhaochang525@126.com
 """
 flow update core
 """
 import argparse
 
-from local.util.check import check_is_dev_branch, check_is_dirty
+from local.util.check import check_is_dev_branch
 from local.util.flow_projects import FlowProjectSpec
 from local.util.git_workspace import *
 from local.util.git_project import GitProject

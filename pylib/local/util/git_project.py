@@ -1,4 +1,7 @@
-import sys
+# !usr/bin/env python
+# -*- coding: UTF-8 -*-
+# Author    : ZhaoChang
+# Email     : zhaochang525@126.com
 import git
 import subprocess
 

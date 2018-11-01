@@ -21,8 +21,6 @@ class FlowProjectSpec(object):
 
         self.workspace = workspace
         self.active = active_project
-        print "workspace: ", self.workspace
-        print "active: ", self.active
         # assert self.active in self.workspace.projects_dir_name
 
     def get_active_projects(self):

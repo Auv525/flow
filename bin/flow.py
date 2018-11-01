@@ -5,8 +5,8 @@ List all flow sub-commands and arguments
 """
 import sys
 import argparse
-from local.cmds.push.core import prepare_push_parser
-from local.cmds.update.core import prepare_update_parser
+from local.cmds.push import prepare_push_parser
+from local.cmds.update import prepare_update_parser
 
 
 def main():

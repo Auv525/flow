@@ -48,11 +48,7 @@ class GitProject(object):
 
     def rebase_master(self):
         """rebase master branch"""
-
-        try:
-            subprocess.check_output('git pull --rebase origin master', cwd=self.project_directory)
-        except subprocess.CalledProcessError:
-            sys.exit(1)
+        subprocess.check_output('git pull --rebase origin master', cwd=self.project_directory)
 
     def checkout_branch(self, branch):
         """
@@ -66,11 +62,15 @@ class GitProject(object):
     def merge_branch(self, branch):
         """merge a specify branch"""
 
-        # TODO:change with gitPython
         subprocess.check_output('git merge {}'.format(branch), cwd=self.project_directory)
 
     def push_master(self):
         """push master branch"""
 
-        # TODO:change with gitPython
         subprocess.check_output('git push origin master', cwd=self.project_directory)
+
+    def retrieve_change(self):
+        """stash changes, rebase master and stash out"""
+        subprocess.check_output('git stash', cwd=self.project_directory)
+        self.rebase_master()
+        subprocess.check_output('git stash pop', cwd=self.project_directory)

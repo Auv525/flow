@@ -71,6 +71,10 @@ class GitProject(object):
 
     def retrieve_change(self):
         """stash changes, rebase master and stash out"""
-        subprocess.check_output('git stash', cwd=self.project_directory)
-        self.rebase_master()
-        subprocess.check_output('git stash pop', cwd=self.project_directory)
+
+        if self.is_dirty():
+            subprocess.check_output('git stash', cwd=self.project_directory)
+            self.rebase_master()
+            subprocess.check_output('git stash pop', cwd=self.project_directory)
+        else:
+            self.rebase_master()

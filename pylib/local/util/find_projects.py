@@ -38,7 +38,7 @@ def find_child_projects(dir):
     Returns a set of subdirectories (only one level deep) that are git projects
 
     :param str dir: starting directory for search
-    :return: the set of directory that was found
+    :return: the list of directory that was found
     """
 
     project_dir_set = set()
@@ -48,7 +48,7 @@ def find_child_projects(dir):
                 if git.repo.fun.is_git_dir(os.path.join(dir, sub_pro, sub_dir)):
                     project_dir_set.add(os.path.join(dir, sub_pro))
 
-    return project_dir_set
+    return list(project_dir_set)
 
 
 def get_projects_names(project_dir_set):

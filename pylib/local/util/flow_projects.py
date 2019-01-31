@@ -6,26 +6,24 @@ import os
 import sys
 
 from local.util.find_projects import find_enclosing_git_project, find_child_projects, get_projects_names
-from local.util.git_workspace import GitWorkspace
 
 
 class FlowProjectSpec(object):
 
-    def __init__(self, workspace, active_project=None):
+    def __init__(self, project_dir_list, active_project=None):
         """
         Keeps track of which part of a Workspace Flow should operate on.
 
         If active_project is None, then that means all projects.
         If active_project is a string, then only that project.
 
-        :param GitWorkspace workspace: Workspace object
+        :param list project_dir_list: list of project directories
         :param str active_project: active project name
         :return:
         """
 
-        self.workspace = workspace
+        self.project_dir_list = project_dir_list
         self.active = active_project
-        # assert self.active in self.workspace.projects_dir_name
 
     def get_active_projects(self):
         """
@@ -38,7 +36,7 @@ class FlowProjectSpec(object):
         if self.active:
             return [self.active]
         else:
-            return self.workspace.get_project_dirs_list()
+            return self.project_dir_list
 
     @classmethod
     def prompt_user_to_specify(cls, dir, action=None):
@@ -46,21 +44,18 @@ class FlowProjectSpec(object):
         This method will, if needed, ask the user for clarification about the intended action
 
         :param str dir: the directory where the search for workspace should begin
-        :param str action: an action that will operate
+        :param str action: an action that will operate, 'update' or 'push'
         :return:
         """
         enclosing_project = find_enclosing_git_project(dir)
-        print 'enclosing: ', enclosing_project
         if enclosing_project is not None:
             # if we found a git project, we assume its parent is a workspace dir
             workspace_dir = os.path.dirname(enclosing_project)
 
             # let's test that theory
             child_projects = find_child_projects(workspace_dir)
-            print 'child: ', child_projects
 
             # prompt user to specify project which should operate on
-            workspace = GitWorkspace(child_projects)
             prompt = 'You have these git projects: {p}\nDo you want to {a} all of these projects or not? (y/n) '.format(
                     p=get_projects_names(child_projects),
                     a=action
@@ -72,14 +67,13 @@ class FlowProjectSpec(object):
             if user says only one, then do: return FlowProjectSpec(workspace, cwd)
             """
             if all_projects_enter.lower() in ['y', 'yes']:
-                return FlowProjectSpec(workspace)
+                return FlowProjectSpec(child_projects)
             else:
-                return FlowProjectSpec(workspace, enclosing_project)
+                return FlowProjectSpec(child_projects, enclosing_project)
         else:
             # if not found a git project, we assume it is a workspace dir
             child_projects = find_child_projects(dir)
             if not len(child_projects):
                 print 'Please run flow command in workspace directory!'
                 sys.exit(1)
-            workspace = GitWorkspace(child_projects)
-            return FlowProjectSpec(workspace)
+            return FlowProjectSpec(child_projects)

@@ -8,6 +8,7 @@ List all flow sub-commands and arguments
 import sys
 import argparse
 from local.cmds.push import prepare_push_parser
+from local.cmds.setup import prepare_setup_parser
 from local.cmds.update import prepare_update_parser
 
 
@@ -17,6 +18,7 @@ def main():
     subparsers = parser.add_subparsers()
 
     # create and prepare the sub_parser for each sub-command
+    prepare_setup_parser(subparsers.add_parser('setup'))
     prepare_push_parser(subparsers.add_parser('push'))
     prepare_update_parser(subparsers.add_parser('update'))
 

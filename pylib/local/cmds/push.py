@@ -5,12 +5,12 @@
 """
 flow push core
 """
+import os
 import argparse
 
 from local.util.check import check_is_dev_branch, check_is_dirty
 from local.util.git_project import GitProject
 from local.util.flow_projects import FlowProjectSpec
-from local.util.git_workspace import *
 
 
 def prepare_push_parser(parser):
@@ -33,11 +33,10 @@ def run(args):
     for dir in project_spec.get_active_projects():
         project = GitProject(dir)
         dev_branch = project.branch_name
-        check_is_dev_branch(dir, dev_branch)
-        check_is_dirty(project)
-
-        project.rebase_master()
-        project.checkout_branch('master')
-        project.merge_branch(dev_branch)
-        project.push_master()
-        project.checkout_branch(dev_branch)
+        if check_is_dev_branch(dir, dev_branch):
+            if check_is_dirty(dir, project):
+                project.rebase_master()
+                project.checkout_branch('master')
+                project.merge_branch(dev_branch)
+                project.push_master()
+                project.checkout_branch(dev_branch)

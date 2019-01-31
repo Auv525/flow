@@ -5,11 +5,11 @@
 """
 flow update core
 """
+import os
 import argparse
 
 from local.util.check import check_is_dev_branch
 from local.util.flow_projects import FlowProjectSpec
-from local.util.git_workspace import *
 from local.util.git_project import GitProject
 
 
@@ -33,5 +33,5 @@ def run(args):
     for dir in project_spec.get_active_projects():
         project = GitProject(dir)
         dev_branch = project.branch_name
-        check_is_dev_branch(dir, dev_branch)
-        project.retrieve_change()
+        if check_is_dev_branch(dir, dev_branch):
+            project.retrieve_change()
